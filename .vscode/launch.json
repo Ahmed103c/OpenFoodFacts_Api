@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-NutritionApplication<Nutrition>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.Tp2.Nutrition.NutritionApplication",
+            "projectName": "Nutrition",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
