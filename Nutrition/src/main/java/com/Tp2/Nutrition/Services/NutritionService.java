@@ -3,6 +3,10 @@ package com.Tp2.Nutrition.Services;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.Tp2.Nutrition.Data.Dtos.NutritionScoreDto;
+import com.Tp2.Nutrition.Data.Dtos.OpenFoodFactsDto;
+import com.Tp2.Nutrition.Data.Model.ResponseModel;
+
 @Service
 public class NutritionService {
 
@@ -12,10 +16,18 @@ public class NutritionService {
         this.restTemplate = restTemplate;
     }
 
-    public String getNutritionData(String productCode) {
+    public ResponseModel getNutritionData(String productCode) {
         String url = "https://world.openfoodfacts.org/api/v0/product/" + productCode + ".json";
-        String response = restTemplate.getForObject(url, String.class);
-        return response;
-    }
+        OpenFoodFactsDto response = restTemplate.getForObject(url, OpenFoodFactsDto.class);
 
+        ResponseModel responseModel = new ResponseModel();
+
+        NutritionScoreDto nutritionScoreDto = new NutritionScoreDto(response.product.nutriscoreData);
+
+        responseModel.name = response.product.name;
+        responseModel.score = nutritionScoreDto.getScore();
+
+
+        return responseModel;
+    }
 }

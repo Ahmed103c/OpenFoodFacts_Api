@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Tp2.Nutrition.Data.Dtos.OpenFoodFactsDto;
+import com.Tp2.Nutrition.Data.Model.ResponseModel;
 import com.Tp2.Nutrition.Services.NutritionService;
 
 
@@ -19,7 +21,7 @@ public class NutritionController {
     }
 
     @GetMapping("")
-    public String getData(@RequestParam(required = true) String barcode) {
+    public ResponseModel getData(@RequestParam(required = true) String barcode) {
         return this.nutritionService.getNutritionData(barcode);
     }
 }
