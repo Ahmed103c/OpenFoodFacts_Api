@@ -30,13 +30,13 @@ public class NutritionDataDto {
         @JsonProperty("id")
         public String name;
 
-        public int points;
+        public Integer points;
 
         public String unit;
 
-        public int value;
+        public Integer value;
 
-        public int getPoints() {
+        public Integer getPoints() {
             return points;
         }
     }

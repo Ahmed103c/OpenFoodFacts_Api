@@ -37,6 +37,7 @@ public class NutritionService {
         
         String url = "https://world.openfoodfacts.org/api/v0/product/" + productCode + ".json";
         OpenFoodFactsDto dto = restTemplate.getForObject(url, OpenFoodFactsDto.class);
+        System.out.println("Data fetched from OpenFoodFacts API : " + dto); 
         
         ResponseModel responseModel = nutritionFactory.dtoToResponseModel(dto, productCode);
         

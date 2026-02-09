@@ -22,11 +22,15 @@ public class NutritionScoreDto {
         this.positiveItems = nutritionData.components.getPositiveItems();
 
         for (NutritionItem item : negativeItems) {
-            this.negativePoints += item.getPoints();
+            if(item.points != null) {
+                this.negativePoints += item.getPoints();
+            }
         }
 
         for (NutritionItem item : positiveItems) {
-            this.positivePoints += item.getPoints();
+            if(item.points != null) {
+                this.positivePoints += item.getPoints();
+            }
         }
 
         this.score = negativePoints - positivePoints;
