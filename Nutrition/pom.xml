@@ -41,10 +41,6 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.8.3</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc</artifactId>
@@ -59,6 +55,26 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		
+		<!-- JPA + Hibernate -->
+    	<dependency>
+    	    <groupId>org.springframework.boot</groupId>
+    	    <artifactId>spring-boot-starter-data-jpa</artifactId>
+    	</dependency>
+
+    	<!-- Driver BDD, par ex. H2 pour les tests -->
+    	<dependency>
+    	    <groupId>com.h2database</groupId>
+    	    <artifactId>h2</artifactId>
+    	    <scope>runtime</scope>
+    	</dependency>
+
+    	<!-- PostgreSQL, etc. -->
+		<dependency>
+		    <groupId>org.postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <scope>runtime</scope>
 		</dependency>
 	</dependencies>
 
