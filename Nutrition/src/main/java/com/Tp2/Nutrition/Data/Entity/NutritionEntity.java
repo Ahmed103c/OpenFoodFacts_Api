@@ -24,6 +24,12 @@ public class NutritionEntity {
     @Column(unique = true)
     private int scoreNutrition;
 
+    @Column()
+    public String grade;
+
+    @Column()
+    public String couleur;
+
     // Getters and Setters
     public int getId() {
         return id;
@@ -56,5 +62,21 @@ public class NutritionEntity {
     public void setScoreNutrition(int scoreNutrition) {
         this.scoreNutrition = scoreNutrition;
     }
-    
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getCouleur() {
+        return couleur;
+    }
+
+    public void setCouleur(String couleur) {
+        this.couleur = couleur;
+    }
+
 }

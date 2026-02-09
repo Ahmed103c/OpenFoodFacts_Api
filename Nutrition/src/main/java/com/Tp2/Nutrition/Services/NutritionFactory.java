@@ -16,6 +16,8 @@ public class NutritionFactory {
         responseModel.barCode = entity.getBarcode();
         responseModel.name = entity.getNom();
         responseModel.score = entity.getScoreNutrition();
+        responseModel.grade = entity.getGrade();
+        responseModel.color = entity.getCouleur();
         return responseModel;
     }
     
@@ -27,6 +29,8 @@ public class NutritionFactory {
         responseModel.barCode = barcode;
         responseModel.name = dto.product.name;
         responseModel.score = nutritionScoreDto.getScore();
+        responseModel.grade = nutritionScoreDto.grade;
+        responseModel.color = nutritionScoreDto.couleur;
         return responseModel;
     }
     
@@ -36,6 +40,8 @@ public class NutritionFactory {
         entity.setBarcode(responseModel.barCode);
         entity.setNom(responseModel.name);
         entity.setScoreNutrition(responseModel.score);
+        entity.setGrade(responseModel.grade);
+        entity.setCouleur(responseModel.color);
         return entity;
     }
 }

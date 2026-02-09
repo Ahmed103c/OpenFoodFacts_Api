@@ -5,4 +5,6 @@ public class ResponseModel {
     public String barCode;
     public String name;
     public int score;
+    public String grade;
+    public String color;
 }
