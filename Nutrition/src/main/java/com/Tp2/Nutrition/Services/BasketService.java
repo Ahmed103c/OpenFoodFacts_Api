@@ -45,4 +45,17 @@ public class BasketService {
             .collect(Collectors.toList());
     }
 
+    public void removeFromBasket(String email, String barcode) {
+        BasketEntity basket = basketRepository.findByUserEmail(email).orElse(null);
+        if (basket != null) {
+            basket.getProductBarcodes().remove(barcode);
+            basketRepository.save(basket);
+        }
+
+    }
+
+    public void deleteBasket(String email) {
+        basketRepository.findByUserEmail(email).ifPresent(basketRepository::delete);
+    }
+
 }

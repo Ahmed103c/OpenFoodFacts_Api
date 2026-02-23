@@ -2,6 +2,7 @@ package com.Tp2.Nutrition.Controllers;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,5 +31,15 @@ public class BasketController {
     @GetMapping("")
     public List<NutritionEntity>  getData(@RequestParam(required = true) String email) {
         return this.basketService.getBasketProducts(email);
+    }
+
+    @DeleteMapping("/removeProduct")
+    public void removeProduct(@RequestParam String email, @RequestParam String barcode) {
+        basketService.removeFromBasket(email, barcode);
+    }
+
+    @DeleteMapping("")
+    public void deleteBasket(@RequestParam String email) {
+        basketService.deleteBasket(email);
     }
 }
