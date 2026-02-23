@@ -10,7 +10,7 @@ import com.Tp2.Nutrition.Services.NutritionService;
 
 
 @RestController
-@RequestMapping("/api/hello")
+@RequestMapping("/api/Product")
 public class NutritionController {
 
     private final NutritionService nutritionService;

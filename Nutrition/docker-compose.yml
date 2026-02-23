@@ -1,23 +1,19 @@
 version: '3.8'
 
 services:
-  database:
+  products_db:
     image: postgres:15-alpine  
-    container_name: products_db_container
+    container_name: nutritionApplicationDb
     environment:
-      - POSTGRES_DB=products_db
+      - POSTGRES_DB=nutritionApplicationDb
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
       - "5433:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - products-db-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      
+
 
 volumes:
-  db-data:
-
-
-
-  
+  products-db-data:
