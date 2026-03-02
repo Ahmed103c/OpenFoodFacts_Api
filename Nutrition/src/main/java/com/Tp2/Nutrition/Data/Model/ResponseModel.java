@@ -7,4 +7,5 @@ public class ResponseModel {
     public int score;
     public String grade;
     public String color;
+    public String[] additives;
 }

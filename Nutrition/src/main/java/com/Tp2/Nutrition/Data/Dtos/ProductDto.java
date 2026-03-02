@@ -13,4 +13,7 @@ public class ProductDto {
 
     @JsonProperty("nutriscore_data")
     public NutritionDataDto nutriscoreData;
+
+    @JsonProperty("additives_tags")
+    public String[] additivesTags;
 }

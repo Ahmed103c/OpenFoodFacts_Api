@@ -18,6 +18,7 @@ public class NutritionFactory {
         responseModel.score = entity.getScoreNutrition();
         responseModel.grade = entity.getGrade();
         responseModel.color = entity.getCouleur();
+        responseModel.additives = entity.getAdditives();
         return responseModel;
     }
     
@@ -31,6 +32,7 @@ public class NutritionFactory {
         responseModel.score = nutritionScoreDto.getScore();
         responseModel.grade = nutritionScoreDto.grade;
         responseModel.color = nutritionScoreDto.couleur;
+        responseModel.additives = dto.product.additivesTags;
         return responseModel;
     }
     
@@ -42,6 +44,7 @@ public class NutritionFactory {
         entity.setScoreNutrition(responseModel.score);
         entity.setGrade(responseModel.grade);
         entity.setCouleur(responseModel.color);
+        entity.setAdditives(responseModel.additives);
         return entity;
     }
 }

@@ -30,6 +30,9 @@ public class NutritionEntity {
     @Column()
     public String couleur;
 
+    @Column()
+    public String[] additives;
+
     // Getters and Setters
     public int getId() {
         return id;
@@ -79,4 +82,12 @@ public class NutritionEntity {
         this.couleur = couleur;
     }
 
+    public String[] getAdditives() {
+        return additives;
+    }
+
+    public void setAdditives(String[] additives) {
+        this.additives = additives;
+    }
+    
 }
