@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Tp2.Nutrition.Data.Entity.AdditifEntity;
-import com.Tp2.Nutrition.Data.Model.Additif;
 import com.Tp2.Nutrition.Repository.AdditifRepository;
 
 

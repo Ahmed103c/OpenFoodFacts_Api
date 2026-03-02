@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Tp2.Nutrition.Data.Entity.NutritionEntity;
+import com.Tp2.Nutrition.Data.Model.ResponseModel;
 import com.Tp2.Nutrition.Services.BasketService;
 
 @RestController
@@ -29,7 +30,7 @@ public class BasketController {
 
     
     @GetMapping("")
-    public List<NutritionEntity>  getData(@RequestParam(required = true) String email) {
+    public List<ResponseModel>  getData(@RequestParam(required = true) String email) {
         return this.basketService.getBasketProducts(email);
     }
 

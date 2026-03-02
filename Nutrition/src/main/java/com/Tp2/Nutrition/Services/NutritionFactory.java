@@ -1,14 +1,34 @@
 package com.Tp2.Nutrition.Services;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.Tp2.Nutrition.Data.Dtos.NutritionScoreDto;
 import com.Tp2.Nutrition.Data.Dtos.OpenFoodFactsDto;
+import com.Tp2.Nutrition.Data.Entity.AdditifEntity;
 import com.Tp2.Nutrition.Data.Entity.NutritionEntity;
 import com.Tp2.Nutrition.Data.Model.ResponseModel;
+import com.Tp2.Nutrition.Repository.AdditifRepository;
 
 @Component
 public class NutritionFactory {
+    @Autowired
+    private AdditifRepository additifRepository;  // ✅ ajout
+
+    // Méthode utilitaire privée pour nettoyer + enrichir
+    private List<AdditifEntity> enrichirAdditifs(String[] additifsRaw) {
+        if (additifsRaw == null) return List.of();
+        return Arrays.stream(additifsRaw)
+            .map(a -> a.replace("en:", "").toUpperCase())  // "en:e322" → "E322"
+            .map(code -> additifRepository.findByCode(code).orElse(null))
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+    }
 
     // Entity -> ResponseModel (depuis la base de données)
     public ResponseModel entityToResponseModel(NutritionEntity entity) {
@@ -18,7 +38,7 @@ public class NutritionFactory {
         responseModel.score = entity.getScoreNutrition();
         responseModel.grade = entity.getGrade();
         responseModel.color = entity.getCouleur();
-        responseModel.additives = entity.getAdditives();
+        responseModel.additives =  enrichirAdditifs(entity.getAdditives());
         return responseModel;
     }
     
@@ -32,7 +52,7 @@ public class NutritionFactory {
         responseModel.score = nutritionScoreDto.getScore();
         responseModel.grade = nutritionScoreDto.grade;
         responseModel.color = nutritionScoreDto.couleur;
-        responseModel.additives = dto.product.additivesTags;
+        responseModel.additives = enrichirAdditifs(dto.product.additivesTags); 
         return responseModel;
     }
     
@@ -44,7 +64,9 @@ public class NutritionFactory {
         entity.setScoreNutrition(responseModel.score);
         entity.setGrade(responseModel.grade);
         entity.setCouleur(responseModel.color);
-        entity.setAdditives(responseModel.additives);
+        entity.setAdditives(responseModel.additives.stream()
+            .map(AdditifEntity::getCode)
+            .toArray(String[]::new));
         return entity;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.Tp2.Nutrition.Data.Entity.BasketEntity;
 import com.Tp2.Nutrition.Data.Entity.NutritionEntity;
+import com.Tp2.Nutrition.Data.Model.ResponseModel;
 import com.Tp2.Nutrition.Repository.BasketRepository;
 
 @Service
@@ -36,15 +37,14 @@ public class BasketService {
         basketRepository.save(basket);
     }
 
-    public List<NutritionEntity> getBasketProducts(String email) {
+    public List<ResponseModel> getBasketProducts(String email) {
         BasketEntity basket = basketRepository.findByUserEmail(email).orElse(null);
         if (basket == null) return new ArrayList<>();
 
         return basket.getProductBarcodes().stream()
-            .map(barcode -> nutritionFactory.responseModelToEntity(nutritionService.getNutritionData(barcode)))
+            .map(barcode -> nutritionService.getNutritionData(barcode))  // ✅ déjà un ResponseModel enrichi
             .collect(Collectors.toList());
     }
-
     public void removeFromBasket(String email, String barcode) {
         BasketEntity basket = basketRepository.findByUserEmail(email).orElse(null);
         if (basket != null) {
