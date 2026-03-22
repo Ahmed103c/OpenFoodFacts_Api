@@ -5,7 +5,7 @@ API REST Spring Boot permettant de consulter les données nutritionnelles de pro
 ---
 
 ## 📋 Sommaire
-
+- [CI](#ci) 
 - [Stack technique](#stack-technique)
 - [Lancer l'application](#lancer-lapplication)
 - [Ports et URLs utiles](#ports-et-urls-utiles)
@@ -40,7 +40,48 @@ Nutrition/
 └── init.sql                  → Données initiales PostgreSQL
 ```
 ---
+## CI
+⚠️⚠️
+Ce projet a été initialement développé sur **GitLab** (dépôt ISIMA).
+Cependant, les runners GitLab de l'ISIMA n'étant pas disponibles pour exécuter
+les pipelines CI/CD, les **GitHub Actions** ont été configurées sur un dépôt
+GitHub personnel en miroir.
 
+> 🔗 Dépôt GitHub avec les pipelines actifs :
+> **https://github.com/Ahmed103c/OpenFoodFacts_Api/**
+
+### Ce que fait le pipeline
+
+```
+push sur main / pull request
+         │
+         ▼
+┌─────────────────────┐
+│    Job : build      │
+│  maven:3.9 + JDK21  │
+│  mvn clean package  │
+│    -DskipTests      │
+│                     │
+│  → produit le JAR   │
+│  → artifact 1h      │
+└──────────┬──────────┘
+           │ needs: build
+           ▼
+┌─────────────────────┐
+│    Job : test       │
+│  maven:3.9 + JDK21  │
+│      mvn test       │
+│                     │
+│  → lance tous les   │
+│    tests unitaires  │
+└─────────────────────┘
+```
+
+Le fichier de configuration est disponible dans `.github/workflows/ci.yml`.
+
+> ⚠️ Le fichier `.gitlab-ci.yml` est conservé dans le dépôt pour la cohérence
+> avec le projet ISIMA, mais il n'est pas exécuté faute de runner disponible.
+---
 ## Stack technique
 
 | Technologie | Rôle |
