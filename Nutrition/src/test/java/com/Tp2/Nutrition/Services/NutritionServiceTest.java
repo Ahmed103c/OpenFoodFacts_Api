@@ -3,8 +3,8 @@ package com.Tp2.Nutrition.Services;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
@@ -44,8 +44,9 @@ class NutritionServiceTest {
     void getNutritionDataReturnsExistingEntityFromRepository() {
         NutritionEntity entity = new NutritionEntity();
         entity.setBarcode("123");
+
         ResponseModel expected = new ResponseModel();
-        expected.barCode = "123";
+        expected.setBarCode("123");
 
         when(nutritionRepository.findByBarcode("123")).thenReturn(Optional.of(entity));
         when(nutritionFactory.entityToResponseModel(entity)).thenReturn(expected);
@@ -67,12 +68,21 @@ class NutritionServiceTest {
     }
 
     @Test
+    void getNutritionDataThrowsWhenBarcodeIsNull() {
+        ProductNotFoundException exception = assertThrows(ProductNotFoundException.class,
+            () -> nutritionService.getNutritionData(null));
+
+        assertEquals("Le code-barres du produit est obligatoire.", exception.getMessage());
+    }
+
+    @Test
     void getNutritionDataFetchesFromApiWhenRepositoryIsEmpty() {
         String barcode = "456";
         OpenFoodFactsDto dto = new OpenFoodFactsDto();
         dto.product = new ProductDto();
+
         ResponseModel expected = new ResponseModel();
-        expected.barCode = barcode;
+        expected.setBarCode(barcode);
 
         NutritionEntity entity = new NutritionEntity();
         entity.setBarcode(barcode);
@@ -107,6 +117,24 @@ class NutritionServiceTest {
 
         assertEquals(
             "Impossible de recuperer le produit pour le code-barres 789.",
+            exception.getMessage());
+    }
+
+    @Test
+    void getNutritionDataThrowsWhenApiReturnsNullDto() {
+        String barcode = "000";
+
+        when(nutritionRepository.findByBarcode(barcode)).thenReturn(Optional.empty());
+        when(restTemplate.getForObject(
+            "https://world.openfoodfacts.org/api/v0/product/" + barcode + ".json",
+            OpenFoodFactsDto.class))
+            .thenReturn(null);
+
+        ProductNotFoundException exception = assertThrows(ProductNotFoundException.class,
+            () -> nutritionService.getNutritionData(barcode));
+
+        assertEquals(
+            "Aucun produit trouve pour le code-barres 000.",
             exception.getMessage());
     }
 }

@@ -7,9 +7,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.mockito.ArgumentCaptor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.never;
@@ -62,14 +62,16 @@ class BasketServiceTest {
     @Test
     void getBasketProductsReturnsResolvedProducts() {
         String email = "user@test.com";
+
         BasketEntity basket = new BasketEntity();
         basket.setUserEmail(email);
         basket.setProductBarcodes(List.of("123", "456"));
 
         ResponseModel first = new ResponseModel();
-        first.barCode = "123";
+        first.setBarCode("123");
+
         ResponseModel second = new ResponseModel();
-        second.barCode = "456";
+        second.setBarCode("456");
 
         when(basketRepository.findByUserEmail(email)).thenReturn(Optional.of(basket));
         when(nutritionService.getNutritionData("123")).thenReturn(first);
@@ -83,8 +85,19 @@ class BasketServiceTest {
     }
 
     @Test
+    void getBasketProductsReturnsEmptyListWhenBasketDoesNotExist() {
+        String email = "unknown@test.com";
+        when(basketRepository.findByUserEmail(email)).thenReturn(Optional.empty());
+
+        List<ResponseModel> result = basketService.getBasketProducts(email);
+
+        assertEquals(0, result.size());
+    }
+
+    @Test
     void removeFromBasketDeletesBarcodeWhenBasketExists() {
         String email = "user@test.com";
+
         BasketEntity basket = new BasketEntity();
         basket.setUserEmail(email);
         basket.setProductBarcodes(new ArrayList<>(List.of("123", "456")));
@@ -95,6 +108,16 @@ class BasketServiceTest {
 
         assertEquals(List.of("456"), basket.getProductBarcodes());
         verify(basketRepository).save(basket);
+    }
+
+    @Test
+    void removeFromBasketDoesNothingWhenBasketDoesNotExist() {
+        String email = "user@test.com";
+        when(basketRepository.findByUserEmail(email)).thenReturn(Optional.empty());
+
+        basketService.removeFromBasket(email, "123");
+
+        verify(basketRepository, never()).save(org.mockito.ArgumentMatchers.any());
     }
 
     @Test
@@ -118,5 +141,27 @@ class BasketServiceTest {
             "Chaque code-barres du panier doit etre renseigne.",
             exception.getMessage());
         verify(basketRepository, never()).findByUserEmail(org.mockito.ArgumentMatchers.anyString());
+    }
+
+    @Test
+    void addToBucketThrowsWhenEmailIsBlank() {
+        InvalidBasketRequestException exception = assertThrows(
+            InvalidBasketRequestException.class,
+            () -> basketService.addToBucket(" ", List.of("123"))
+        );
+
+        assertEquals("L'email utilisateur est obligatoire.", exception.getMessage());
+    }
+
+    @Test
+    void addToBucketThrowsWhenBarcodesListIsEmpty() {
+        InvalidBasketRequestException exception = assertThrows(
+            InvalidBasketRequestException.class,
+            () -> basketService.addToBucket("user@test.com", List.of())
+        );
+
+        assertEquals(
+            "La liste des codes-barres ne peut pas etre vide.",
+            exception.getMessage());
     }
 }
