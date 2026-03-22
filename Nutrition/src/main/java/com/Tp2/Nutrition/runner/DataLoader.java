@@ -20,7 +20,7 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) {
         if (additifRepository.count() == 0) {
             System.out.println("📂 Table vide → import du CSV...");
-            csvImportService.importerCsv("C:\\Users\\legen\\Documents\\java_pro_tp2\\Nutrition\\src\\main\\resources\\additifs.csv");
+            csvImportService.importerCsv("classpath:additifs.csv");
         } else {
             System.out.println("✅ Données déjà présentes, import ignoré.");
         }
