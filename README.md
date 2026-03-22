@@ -13,6 +13,32 @@ API REST Spring Boot permettant de consulter les données nutritionnelles de pro
 - [Concepts clés implémentés](#concepts-clés-implémentés)
 - [Endpoints API](#endpoints-api)
 
+
+---
+
+## Structure du projet
+
+```
+Nutrition/
+├── src/main/java/com/Tp2/Nutrition/
+│   ├── Controllers/          → Points d'entrée HTTP
+│   ├── Services/             → Logique métier + Factory
+│   ├── Repository/           → Accès base de données (Spring Data JPA)
+│   ├── Data/
+│   │   ├── Dtos/             → Objets de transfert (API externe → app)
+│   │   ├── Entity/           → Entités JPA (app → base de données)
+│   │   └── Model/            → Modèles de réponse (app → client)
+│   ├── Exceptions/           → Exceptions métier + handler global
+│   ├── Configurations/       → Beans Spring (RestTemplate...)
+│   └── runner/               → DataLoader (import CSV au démarrage)
+├── src/main/resources/
+│   ├── application.properties
+│   ├── logback-spring.xml    → Configuration des logs
+│   └── additifs.csv          → 300+ additifs alimentaires
+├── src/test/                 → Tests unitaires (JUnit 5 + Mockito)
+├── docker-compose.yml        → PostgreSQL + Seq + seq-input-gelf
+└── init.sql                  → Données initiales PostgreSQL
+```
 ---
 
 ## Stack technique
@@ -331,28 +357,3 @@ Les appels suivants pour le même code-barres sont servis directement depuis Pos
 La documentation interactive complète (avec possibilité de tester les endpoints)
 est disponible sur **http://localhost:8081/swagger-ui/index.html#/**.
 
----
-
-## Structure du projet
-
-```
-Nutrition/
-├── src/main/java/com/Tp2/Nutrition/
-│   ├── Controllers/          → Points d'entrée HTTP
-│   ├── Services/             → Logique métier + Factory
-│   ├── Repository/           → Accès base de données (Spring Data JPA)
-│   ├── Data/
-│   │   ├── Dtos/             → Objets de transfert (API externe → app)
-│   │   ├── Entity/           → Entités JPA (app → base de données)
-│   │   └── Model/            → Modèles de réponse (app → client)
-│   ├── Exceptions/           → Exceptions métier + handler global
-│   ├── Configurations/       → Beans Spring (RestTemplate...)
-│   └── runner/               → DataLoader (import CSV au démarrage)
-├── src/main/resources/
-│   ├── application.properties
-│   ├── logback-spring.xml    → Configuration des logs
-│   └── additifs.csv          → 300+ additifs alimentaires
-├── src/test/                 → Tests unitaires (JUnit 5 + Mockito)
-├── docker-compose.yml        → PostgreSQL + Seq + seq-input-gelf
-└── init.sql                  → Données initiales PostgreSQL
-```
