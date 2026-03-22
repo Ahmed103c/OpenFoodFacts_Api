@@ -7,33 +7,52 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-
+/**
+ * Entité JPA représentant un produit alimentaire en base de données.
+ * Mappée sur la table "Products".
+ */
 @Entity
 @Table(name = "Products")
 public class NutritionEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
+
+    /** Code-barres unique du produit (ex: "3057640257773"). */
     @Column(nullable = false)
     private String barcode;
 
+    /** Nom du produit. */
     @Column(nullable = false)
     private String nom;
-    
-    @Column(unique = true)
+
+    /**
+     * Score nutritionnel calculé à partir des données OpenFoodFacts.
+     * Plusieurs produits peuvent avoir le même score — pas de contrainte unique.
+     */
+    @Column
     private int scoreNutrition;
 
-    @Column()
-    public String grade;
+    /** Grade nutritionnel textuel (ex: "Bon", "Degueu"). */
+    @Column
+    private String grade;
 
-    @Column()
-    public String couleur;
+    /** Couleur associée au grade (ex: "Green", "Red"). */
+    @Column
+    private String couleur;
 
-    @Column()
-    public String[] additives;
+    /**
+     * Codes des additifs présents dans le produit (ex: ["E322", "E471"]).
+     * Stockés sous forme de tableau de chaînes.
+     */
+    @Column
+    private String[] additives;
 
-    // Getters and Setters
+    // -------------------------------------------------------------------------
+    // Getters & Setters
+    // -------------------------------------------------------------------------
+
     public int getId() {
         return id;
     }
@@ -89,5 +108,4 @@ public class NutritionEntity {
     public void setAdditives(String[] additives) {
         this.additives = additives;
     }
-    
 }
