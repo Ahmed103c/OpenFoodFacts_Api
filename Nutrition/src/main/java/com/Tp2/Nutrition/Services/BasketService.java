@@ -15,12 +15,10 @@ import com.Tp2.Nutrition.Repository.BasketRepository;
 public class BasketService {
     private final BasketRepository basketRepository;
     private final NutritionService nutritionService;
-    private final NutritionFactory nutritionFactory;
 
-    public BasketService(BasketRepository basketRepository, NutritionService nutritionService, NutritionFactory nutritionFactory) {
+    public BasketService(BasketRepository basketRepository, NutritionService nutritionService) {
         this.basketRepository = basketRepository;
         this.nutritionService = nutritionService;
-        this.nutritionFactory = nutritionFactory;
     }
 
 
@@ -47,7 +45,7 @@ public class BasketService {
         if (basket == null) return new ArrayList<>();
 
         return basket.getProductBarcodes().stream()
-            .map(barcode -> nutritionService.getNutritionData(barcode))  // ✅ déjà un ResponseModel enrichi
+            .map(barcode -> nutritionService.getNutritionData(barcode)) 
             .collect(Collectors.toList());
     }
     public void removeFromBasket(String email, String barcode) {
