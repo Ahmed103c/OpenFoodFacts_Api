@@ -2,6 +2,7 @@ package com.Tp2.Nutrition.Services;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Tp2.Nutrition.Data.Entity.AdditifEntity;
+import com.Tp2.Nutrition.Exceptions.CsvImportException;
 import com.Tp2.Nutrition.Repository.AdditifRepository;
 
 
@@ -21,7 +23,7 @@ public class CsvImportService {
     @Autowired
     private AdditifRepository additifRepository;
 
-    public void importerCsv(String cheminFichier) throws Exception {
+    public void importerCsv(String cheminFichier) {
         List<AdditifEntity> additifs = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(
@@ -40,6 +42,8 @@ public class CsvImportService {
                 a.setDanger(colonnes[2].trim());
                 additifs.add(a);
             }
+        } catch (IOException exception) {
+            throw new CsvImportException("Impossible d'importer le fichier CSV des additifs.", exception);
         }
 
         additifRepository.saveAll(additifs);
