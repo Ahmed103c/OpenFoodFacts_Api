@@ -19,13 +19,14 @@ jobs:
           distribution: 'temurin'
 
       - name: Build
+        working-directory: ./Nutrition
         run: mvn clean package -DskipTests
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
         with:
           name: app-jar
-          path: target/*.jar
+          path: Nutrition/target/*.jar
           retention-days: 1
 
   test:
@@ -41,4 +42,5 @@ jobs:
           distribution: 'temurin'
 
       - name: Run tests
+        working-directory: ./Nutrition
         run: mvn test
