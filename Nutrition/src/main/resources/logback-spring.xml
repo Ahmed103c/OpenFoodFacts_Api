@@ -1,0 +1,53 @@
+<configuration>
+
+    <!-- ===================================================================
+         Appender CONSOLE
+         Affiche les logs dans le terminal — actif en toutes circonstances.
+         =================================================================== -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ===================================================================
+         Appender GELF → Seq
+         Envoie les logs en format GELF (Graylog Extended Log Format) via UDP
+         vers le conteneur seq-input-gelf sur le port 12201.
+         seq-input-gelf relaie ensuite les logs vers l'interface Seq.
+
+         Chaque log apparaîtra dans Seq avec : timestamp, level, logger,
+         thread, message et la stacktrace complète en cas d'exception.
+         =================================================================== -->
+    <appender name="GELF" class="de.siegmar.logbackgelf.GelfUdpAppender">
+        <graylogHost>localhost</graylogHost>
+        <graylogPort>12201</graylogPort>
+        <encoder class="de.siegmar.logbackgelf.GelfEncoder">
+            <!-- Inclut les champs MDC (contexte de la requête) dans chaque log -->
+            <includeRawMessage>false</includeRawMessage>
+            <includeLevelName>true</includeLevelName>
+        </encoder>
+    </appender>
+
+    <!-- ===================================================================
+         Configuration des niveaux de log par package
+         =================================================================== -->
+
+    <!-- Logs SQL Hibernate en DEBUG pour faciliter le débogage des requêtes -->
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+
+    <!-- Logs Spring Web en INFO (évite le bruit des requêtes HTTP internes) -->
+    <logger name="org.springframework.web" level="INFO"/>
+
+    <!-- Logs de l'application en DEBUG pour avoir le maximum de détails -->
+    <logger name="com.Tp2.Nutrition" level="DEBUG"/>
+
+    <!-- ===================================================================
+         Racine : INFO par défaut, avec les deux appenders actifs
+         =================================================================== -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="GELF"/>
+    </root>
+
+</configuration>

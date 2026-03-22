@@ -81,6 +81,13 @@
 		    <artifactId>postgresql</artifactId>
 		    <scope>runtime</scope>
 		</dependency>
+
+		<!-- Appender GELF pour envoyer les logs vers Seq via seq-input-gelf -->
+		<dependency>
+			<groupId>de.siegmar</groupId>
+			<artifactId>logback-gelf</artifactId>
+			<version>6.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -1,8 +1,10 @@
 version: '3.8'
 
 services:
+
+  # Base de données PostgreSQL
   products_db:
-    image: postgres:15-alpine  
+    image: postgres:15-alpine
     container_name: nutritionApplicationDb
     environment:
       - POSTGRES_DB=nutritionApplicationDb
@@ -13,7 +15,34 @@ services:
     volumes:
       - products-db-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
 
+  # Serveur de logs Seq — interface web accessible sur http://localhost:8090
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    ports:
+      - "8090:80"    # UI web Seq
+      - "5341:5341"  # Port d'ingestion interne (utilisé par seq-input-gelf)
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=True
+    volumes:
+      - seq-data:/data
+    restart: unless-stopped
+
+  # Proxy GELF : reçoit les logs UDP depuis l'app Spring Boot et les transmet à Seq
+  seq-input-gelf:
+    image: datalust/seq-input-gelf:latest
+    container_name: seq-input-gelf
+    ports:
+      - "12201:12201/udp"   # Port GELF UDP écouté par l'appender logback
+    environment:
+      SEQ_ADDRESS: "http://seq:5341"
+    depends_on:
+      - seq
+    restart: unless-stopped
 
 volumes:
   products-db-data:
+  seq-data:
